@@ -1,0 +1,28 @@
+function vec = E2NearFieldN_Grid(kinc,kma,R,h,l,X,Y,Z,N,I,fourier_series)
+%UNTITLED2 Summary of this function goes here
+%   Detailed explanation goes here
+
+Partial_x3_Psi=@(x1,x2,x3,y1,y2)(1i.*kinc.*exp(1i.*kinc.*sqrt((x3-l/2).^2+(x1-y1).^2+(x2-y2).^2))./4/pi./sqrt((x3-l/2).^2+(x1-y1).^2+(x2-y2).^2)-...
+    exp(1i.*kinc.*sqrt((x3-l/2).^2+(x1-y1).^2+(x2-y2).^2))./4/pi./((x3-l/2).^2+(x1-y1).^2+(x2-y2).^2)).*(x3-l/2)./sqrt((x3-l/2).^2+(x1-y1).^2+(x2-y2).^2);
+
+vec=0*X;
+
+for i=1:I
+    Coe_E2_R1_m1_even=fourier_series((i-1)*(2*N+1)+1);
+    Coe_E2_R1_m_1_even=Coe_E2_R1_m1_even;
+    Coe_E2_R1_m1_TM_even=fourier_series((i-1)*(2*N+1)+(N+2:2*N+1));
+    Coe_E2_R1_m_1_TM_even=-Coe_E2_R1_m1_TM_even;
+    R1=R(i);
+    h1=h(i);
+    integrand_E2_R1 = @(x1,x2,x3,s,theta)-2.*R1.*h1.*Partial_x3_Psi(x1,x2,x3,R1.*(1+s.*h1).*cos(theta),R1.*(1+s.*h1).*sin(theta)).*R1.*(1+s.*h1).*...
+    (Coe_E2_R1_m1_even.*E_TE_2(i,0,R1,h1,l,kma,R1.*(1+s.*h1),theta,0)+Coe_E2_R1_m_1_even.*E_TE_2(-i,0,R1,h1,l,kma,R1.*(1+s.*h1),theta,0)+...
+    Coe_E2_R1_m1_TM_even(1).*E_TM_2(i,1,R1,h1,l,kma,R1.*(1+s.*h1),theta,0)+Coe_E2_R1_m1_TM_even(2).*E_TM_2(i,2,R1,h1,l,kma,R1.*(1+s.*h1),theta,0)+Coe_E2_R1_m1_TM_even(3).*E_TM_2(i,3,R1,h1,l,kma,R1.*(1+s.*h1),theta,0)+...
+    Coe_E2_R1_m1_TM_even(4).*E_TM_2(i,4,R1,h1,l,kma,R1.*(1+s.*h1),theta,0)+Coe_E2_R1_m1_TM_even(5).*E_TM_2(i,5,R1,h1,l,kma,R1.*(1+s.*h1),theta,0)+Coe_E2_R1_m1_TM_even(6).*E_TM_2(i,6,R1,h1,l,kma,R1.*(1+s.*h1),theta,0)+...
+    Coe_E2_R1_m1_TM_even(7).*E_TM_2(i,7,R1,h1,l,kma,R1.*(1+s.*h1),theta,0)+Coe_E2_R1_m1_TM_even(8).*E_TM_2(i,8,R1,h1,l,kma,R1.*(1+s.*h1),theta,0)+Coe_E2_R1_m1_TM_even(9).*E_TM_2(i,9,R1,h1,l,kma,R1.*(1+s.*h1),theta,0)+Coe_E2_R1_m1_TM_even(10).*E_TM_2(i,10,R1,h1,l,kma,R1.*(1+s.*h1),theta,0)+...
+    Coe_E2_R1_m_1_TM_even(1).*E_TM_2(-i,1,R1,h1,l,kma,R1.*(1+s.*h1),theta,0)+Coe_E2_R1_m_1_TM_even(2).*E_TM_2(-i,2,R1,h1,l,kma,R1.*(1+s.*h1),theta,0)+Coe_E2_R1_m_1_TM_even(3).*E_TM_2(-i,3,R1,h1,l,kma,R1.*(1+s.*h1),theta,0)+...
+    Coe_E2_R1_m_1_TM_even(4).*E_TM_2(-i,4,R1,h1,l,kma,R1.*(1+s.*h1),theta,0)+Coe_E2_R1_m_1_TM_even(5).*E_TM_2(-i,5,R1,h1,l,kma,R1.*(1+s.*h1),theta,0)+Coe_E2_R1_m_1_TM_even(6).*E_TM_2(-i,6,R1,h1,l,kma,R1.*(1+s.*h1),theta,0)+...
+    Coe_E2_R1_m_1_TM_even(7).*E_TM_2(-i,7,R1,h1,l,kma,R1.*(1+s.*h1),theta,0)+Coe_E2_R1_m_1_TM_even(8).*E_TM_2(-i,8,R1,h1,l,kma,R1.*(1+s.*h1),theta,0)+Coe_E2_R1_m_1_TM_even(9).*E_TM_2(-i,9,R1,h1,l,kma,R1.*(1+s.*h1),theta,0)+Coe_E2_R1_m_1_TM_even(10).*E_TM_2(-i,10,R1,h1,l,kma,R1.*(1+s.*h1),theta,0));
+    vec = vec+(AnnularNearField(integrand_E2_R1,X.',Y.',Z.')).';
+end
+
+end
