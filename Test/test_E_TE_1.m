@@ -1,0 +1,27 @@
+kinc=1;
+h=0.01;
+m=1;
+R=1;
+l=1;
+x=[-pi:0.01:pi];
+y=[-pi:0.01:pi];
+lenx=length(x);
+leny=length(y);
+[X,Y]=meshgrid(x,y);
+X=X(:);
+Y=Y(:);
+lenX=length(X);
+lenY=length(Y);
+Z=0*X;
+for(i=1:lenX)
+    r=sqrt(X(i)^2+Y(i)^2);
+    if(r>=R && r<=R*1.02^2)
+        Z(i)=E_TE_1(m,R,h,l,kinc,r,angle(X(i)+1i*Y(i)),0);
+    else
+        Z(i)=0;
+    end
+end
+X=reshape(X,lenx,leny);
+Y=reshape(Y,lenx,leny);
+Z=real(reshape(Z,lenx,leny));
+mesh(X,Y,Z)

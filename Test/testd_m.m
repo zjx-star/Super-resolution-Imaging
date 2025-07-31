@@ -1,0 +1,15 @@
+m=2;
+l=1;
+h=0.025;
+mode=0;
+R1=2;
+k=sqrt(1);
+d1=sqrt(3)/2;
+Out=[];
+format long;
+Dm=D_m(m,l,k,R1,h,mode);
+Am=A_mm(m,l,k,R1,R1,h,h,mode);
+am=asymp_a_m(m,k,l,R1,h,d1);
+dm=dasymptotic(m,0,l,R1,h,mode,d1);
+disp(dm);
+disp(am/(Dm-Am));

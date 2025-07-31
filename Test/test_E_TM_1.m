@@ -1,0 +1,28 @@
+kinc=1;
+h=0.02;
+m=3;
+n=2;
+R=3;
+l=1;
+x=[-pi:0.005:pi];
+y=[-pi:0.005:pi];
+lenx=length(x);
+leny=length(y);
+[X,Y]=meshgrid(x,y);
+X=X(:);
+Y=Y(:);
+lenX=length(X);
+lenY=length(Y);
+Z=0*X;
+for(i=1:lenX)
+    r=sqrt(X(i)^2+Y(i)^2);
+    if(r>=R && r<=R*(1+h))
+        Z(i)=E_TM_1(m,n,R,h,l,kinc,r,angle(X(i)+1i*Y(i)),1);
+    else
+        Z(i)=0;
+    end
+end
+X=reshape(X,lenx,leny);
+Y=reshape(Y,lenx,leny);
+Z=imag(reshape(Z,lenx,leny));
+mesh(X,Y,Z)
